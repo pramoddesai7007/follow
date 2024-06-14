@@ -12,6 +12,7 @@ const Employee = require('../models/Employee');
 const SubEmployee = require('../models/SubEmployee');
 const Task = require('../models/Task');
 const combinedMiddleware = require('./../combinedMiddleware');
+const fs = require('fs');
 const ADMIN_JWT_SECRET = process.env.ADMIN_JWT_SECRET
 
 // Route to register (sign up) an employee
@@ -134,6 +135,8 @@ router.post('/register', [
 // Admin Login
 router.post('/login',combinedMiddleware, async (req, res) => {
     const { email, password } = req.body;
+    const subscriptionData = JSON.parse(fs.readFileSync('subscription.json', 'utf8'));
+        const registrationData = JSON.parse(fs.readFileSync('registration.json', 'utf8'));
 
     try {
         // Check if an employee with the provided email exists
@@ -163,12 +166,13 @@ router.post('/login',combinedMiddleware, async (req, res) => {
         // Create a JWT token with the employee's information and role
         const token = jwt.sign({ email: employee.email, role, adminUserId: employee.adminUserId, adminCompanyName: employee.adminCompanyName, companyId: employee.companyId, employeeId: employee._id, name: employee.name }, ADMIN_JWT_SECRET,);
 
-        return res.status(200).json({ message: 'Authentication successful', token });
+        return res.status(200).json({ message: 'Authentication successful', token,
+        subscriptionStatus: subscriptionData.status,
+        registrationStatus: registrationData.status });
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
 
 
 

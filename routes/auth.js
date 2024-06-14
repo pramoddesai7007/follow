@@ -67,8 +67,8 @@ router.post('/login',combinedMiddleware, [
     try {
 
         // Read subscription.json
-        const subscriptionData = JSON.parse(fs.readFileSync('../../subscription.json', 'utf8'));
-        const registrationData = JSON.parse(fs.readFileSync('../../registration.json', 'utf8'));
+        const subscriptionData = JSON.parse(fs.readFileSync('subscription.json', 'utf8'));
+        const registrationData = JSON.parse(fs.readFileSync('registration.json', 'utf8'));
         // Retrieve the hashed password for the admin based on username
         const admin = await Admin.findOne({ username });
 
@@ -104,8 +104,8 @@ router.post('/login',combinedMiddleware, [
         let registrationStatus = 'unknown';
         //return res.status(500).json({ message: 'Internal server error' });
         try {
-            const subscriptionData = JSON.parse(fs.readFileSync('path/to/subscription.json', 'utf8'));
-            const registrationData = JSON.parse(fs.readFileSync('path/to/registration.json', 'utf8'));
+            const subscriptionData = JSON.parse(fs.readFileSync('subscription.json', 'utf8'));
+            const registrationData = JSON.parse(fs.readFileSync('registration.json', 'utf8'));
             subscriptionStatus = subscriptionData.status;
             registrationStatus = registrationData.status;
         } catch (fsError) {
@@ -119,7 +119,6 @@ router.post('/login',combinedMiddleware, [
         });
     }
 });
-
 
 
 

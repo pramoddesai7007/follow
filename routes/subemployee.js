@@ -7,12 +7,15 @@ const jwt = require('jsonwebtoken');
 const SubEmployee = require('../models/SubEmployee');
 const jwtMiddleware = require('../jwtmiddleware');
 const Employee = require('../models/Employee');
+const fs = require('fs');
 
 // const SUBEMPLOYEE_JWT_SECRET = "YourSubEmployeeSecretKey"
 const SUBEMPLOYEE_JWT_SECRET = process.env.SUBEMPLOYEE_JWT_SECRET
 
-router.post('/login', async (req, res) => {
+router.post('/login',combinedMiddleware, async (req, res) => {
   const { email, password } = req.body;
+  const subscriptionData = JSON.parse(fs.readFileSync('subscription.json', 'utf8'));
+        const registrationData = JSON.parse(fs.readFileSync('registration.json', 'utf8'));
 
   try {
     // Find the sub-employee by email
@@ -36,7 +39,9 @@ router.post('/login', async (req, res) => {
       SUBEMPLOYEE_JWT_SECRET,
     );
     console.log(token)
-    return res.status(200).json({ message: 'Authentication successful', token });
+    return res.status(200).json({ message: 'Authentication successful', token,
+    subscriptionStatus: subscriptionData.status,
+    registrationStatus: registrationData.status});
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }

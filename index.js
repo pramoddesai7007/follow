@@ -68,6 +68,38 @@ app.post('/subscribe-yearly', (req, res) => {
 });
 
 
+// API endpoint to get subscription details
+app.get('/api/subscription', (req, res) => {
+  const filePath = path.join(__dirname, 'subscription.json');
+  fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+          return res.status(500).json({ error: 'Failed to read subscription file' });
+      }
+      try {
+          const subscription = JSON.parse(data);
+          res.json(subscription);
+      } catch (parseErr) {
+          res.status(500).json({ error: 'Failed to parse subscription file' });
+      }
+  });
+});
+
+// API endpoint to get registration details
+app.get('/api/registration', (req, res) => {
+  const filePath = path.join(__dirname, 'registration.json');
+  fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+          return res.status(500).json({ error: 'Failed to read registration file' });
+      }
+      try {
+          const registration = JSON.parse(data);
+          res.json(registration);
+      } catch (parseErr) {
+          res.status(500).json({ error: 'Failed to parse registration file' });
+      }
+  });
+});
+
 
 
 app.use('/api/auth', require('./routes/auth'));
